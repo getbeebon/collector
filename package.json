@@ -1,0 +1,21 @@
+{
+  "name": "collector",
+  "version": "0.0.1",
+  "description": "",
+  "main": "collector.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "amqplib": "^0.4.2",
+    "body-parser": "^1.15.2",
+    "color-logger": "0.0.6",
+    "config": "^1.21.0",
+    "express": "^4.14.0",
+    "moment": "^2.15.0",
+    "mysql": "^2.11.1",
+    "q": "^1.4.1"
+  }
+}
