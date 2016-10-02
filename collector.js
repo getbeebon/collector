@@ -1,39 +1,50 @@
+
 var express = require('express');
 var bodyparser = require('body-parser');
-var mysql = require('mysql');
+var mysql = require('mysql2');
 var config = require('config');
+var Joi = require('joi');
 
 var Handler = require('./lib/handler');
-//var publish = require('./lib/amqp');
+var configSchema = require('./lib/configSchema');
 
-var app = express();
-var conn = mysql.createConnection(config.mysql);
+Joi.validate(config, configSchema, function (err, config) {
+    if (err) {
+        console.log(err);
+        process.exit(1);
+    } else {
+        var app = express();
+        var conn = mysql.createConnection(config.mysql);
 
-function handleDisconnect(connection) {
-    connection.on('error', function (err) {
-        if (!err.fatal) {
-            return;
+        function handleDisconnect(connection) {
+            connection.on('error', function (err) {
+                if (!err.fatal) {
+                    return;
+                }
+                
+                if (err.code !== 'PROTOCOL_CONNECTION_LOST') {
+                    throw err;  
+                }
+
+                console.log('Re-connecting lost connection: ' + err.stack);
+                conn = mysql.createConnection(connection.config);
+                handleDisconnect(conn);
+                conn.connect();
+            });
         }
-        
-        if (err.code !== 'PROTOCOL_CONNECTION_LOST') {
-            throw err;  
-        }
 
-        console.log('Re-connecting lost connection: ' + err.stack);
-        conn = mysql.createConnection(connection.config);
         handleDisconnect(conn);
-        conn.connect();
-    });
-}
+        var handler = new Handler(conn);
 
-handleDisconnect(conn);
+        app.post('/api/key/:key/tag/:tag', bodyparser.json(), handler.handle);
+        app.post('/api/key/:key/tag/', bodyparser.json(), handler.handle);
+        app.post('/api/key/:key', bodyparser.json(), handler.handle);
+        app.post('/api/key/', handler.handleError);
+        app.post('/api/', handler.handleError);
 
-var handler = new Handler(conn);
+        app.listen(config.port, function(){
+            console.log('start');
+        });
 
-app.post('/api/key/:key/tag/:tag', bodyparser.json(), handler.handle);
-app.post('/api/key/:key/tag/', bodyparser.json(), handler.handle);
-app.post('/api/key/:key', bodyparser.json(), handler.handle);
-app.post('/api/key/', handler.handleError);
-app.post('/api/', handler.handleError);
-
-app.listen(config.port);
+    }
+});
