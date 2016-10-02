@@ -10,6 +10,12 @@ $ curl -H "Content-Type: application/json" -X POST -d \
     '{
        "type": "some type",
        "data": "some data"
-     }' http://<:ip>:3000/api/key/<:key>/tag/<:tag>
+     }' http://<:ip>:<:port>/api/key/<:key>/tag/<:tag>
+
+$ curl -H "Content-Type: application/json" -X POST -d     '{
+       "type": "some type",
+       "data": "some data"
+     }' http://localhost:3000/api/key/key1234/tag/123
 
 `````
+
