@@ -42,7 +42,7 @@ Joi.validate(config, configSchema, function (err, config) {
         app.post('/api/key/', handler.handleError);
         app.post('/api/', handler.handleError);
 
-        app.listen(config.port, function(){
+        app.listen(config.collector.port, function(){
             console.log('start');
         });
 

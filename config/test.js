@@ -1,5 +1,7 @@
 module.exports = {
-    port: '3000',
+    collector:{
+    	port: '3000',
+    },
     mysql: {
         host: '127.0.0.1',
         user: 'root',
