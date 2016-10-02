@@ -1,5 +1,5 @@
 module.exports = {
-    collector:{
+    collector: {
     	port: '3000',
     },
     mysql: {
