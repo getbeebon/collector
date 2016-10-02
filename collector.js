@@ -4,6 +4,7 @@ var bodyparser = require('body-parser');
 var mysql = require('mysql2');
 var config = require('config');
 var Joi = require('joi');
+var console = require('tracer').colorConsole();
 
 var Handler = require('./lib/handler');
 var configSchema = require('./lib/configSchema');
