@@ -9,6 +9,11 @@ var console = require('tracer').colorConsole();
 var Handler = require('./lib/handler');
 var configSchema = require('./lib/configSchema');
 
+var Amqp = require('./lib/amqp');
+
+var amqp = new Amqp();
+
+
 Joi.validate(config, configSchema, function (err, config) {
     if (err) {
         console.log(err);
@@ -35,7 +40,8 @@ Joi.validate(config, configSchema, function (err, config) {
         }
 
         handleDisconnect(conn);
-        var handler = new Handler(conn);
+        
+        var handler = new Handler(conn, amqp);
 
         app.post('/api/key/:key/tag/:tag', bodyparser.json(), handler.handle);
         app.post('/api/key/:key/tag/', bodyparser.json(), handler.handle);
