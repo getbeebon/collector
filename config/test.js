@@ -10,6 +10,9 @@ module.exports = {
         multipleStatements: true
     },
     amqp: {
-        connectionString: "amqp://127.0.0.1:5672"
+        connectionString: "amqp://127.0.0.1:5672",
+        queues: [
+            "key1235"
+        ]
     }
 };

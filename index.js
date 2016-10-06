@@ -14,7 +14,7 @@ var server = function (config) {
 
     var app, conn, amqp;
 
-    var init = function () {
+    var init = function (config) {
         app = express();
         conn = mysql.createConnection(config.mysql);
         amqp = new Amqp(config);
@@ -38,7 +38,7 @@ var server = function (config) {
 
         handleDisconnect(conn);
 
-        var handler = new Handler(conn, amqp);
+        var handler = new Handler(conn, amqp, config);
 
         app.post('/api/key/:key/tag/:tag', bodyparser.json(), handler.handle);
         app.post('/api/key/:key/tag/', bodyparser.json(), handler.handle);
@@ -52,7 +52,7 @@ var server = function (config) {
             console.log(err);
             process.exit(1);
         } else {
-            init();            
+            init(config);            
         }
     });
 
