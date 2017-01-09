@@ -57,6 +57,8 @@ var server = function (config) {
         app.post('/api/task/:key/tag/', handler.handleTask);
         app.post('/api/task/:key', handler.handleTask);
         app.post('/api/task/', handler.handleError);
+
+        app.get('/api/task/:key/status/:id', handler.handleStatus)
     };
 
     Joi.validate(config, configSchema, function (err, config) {
