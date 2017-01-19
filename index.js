@@ -1,6 +1,5 @@
 var express = require('express');
 var bodyparser = require('body-parser');
-var mysql = require('mysql2');
 var Joi = require('joi');
 var console = require('tracer').colorConsole();
 
@@ -9,37 +8,19 @@ var configSchema = require('./lib/configSchema');
 
 var Amqp = require('./lib/amqp');
 var Kue = require('./lib/kue');
+var Db = require('./lib/db');
 
 var server = function (config) {
 
-    var app, conn, amqp, kue;
+    var app, db, amqp, kue;
 
     var init = function (config) {
         app = express();
-        conn = mysql.createConnection(config.mysql);
         amqp = new Amqp(config);
-        kue = new Kue(config, conn);
+        db = new Db(config);
+        kue = new Kue(config, db);
 
-        function handleDisconnect(connection) {
-            connection.on('error', function (err) {
-                if (!err.fatal) {
-                    return;
-                }
-
-                if (err.code !== 'PROTOCOL_CONNECTION_LOST') {
-                    throw err;
-                }
-
-                console.log('Re-connecting lost connection: ' + err.stack);
-                conn = mysql.createConnection(connection.config);
-                handleDisconnect(conn);
-                conn.connect();
-            });
-        }
-
-        handleDisconnect(conn);
-
-        var handler = new Handler(conn, amqp, kue, config);
+        var handler = new Handler(db, amqp, kue, config);
         app.use(bodyparser.json());
 
         app.post('/api/key/:key/tag/:tag', handler.handle);
