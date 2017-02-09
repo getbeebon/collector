@@ -6,21 +6,19 @@ var console = require('tracer').colorConsole();
 var Handler = require('./lib/handler');
 var configSchema = require('./lib/configSchema');
 
-var Amqp = require('./lib/amqp');
 var Kue = require('./lib/kue');
 var Db = require('./lib/db');
 
 var server = function (config) {
 
-    var app, db, amqp, kue;
+    var app, db, kue;
 
     var init = function (config) {
         app = express();
-        amqp = new Amqp(config);
         db = new Db(config);
         kue = new Kue(config, db);
 
-        var handler = new Handler(db, amqp, kue, config);
+        var handler = new Handler(db, kue, config);
         app.use(bodyparser.json());
 
         app.post('/api/key/:key/tag/:tag', handler.handle);
