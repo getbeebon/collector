@@ -11,5 +11,6 @@ module.exports = {
     },
     kue: {
         prefix: ''
-    }
+    },
+    file_path: __dirname + '/../uploads/'
 };

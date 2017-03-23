@@ -1,5 +1,6 @@
 var express = require('express');
 var bodyparser = require('body-parser');
+var multipart = require('connect-multiparty');
 var Joi = require('joi');
 var console = require('tracer').colorConsole();
 
@@ -36,6 +37,8 @@ var server = function (config) {
         app.post('/api/task/:key/tag/', handler.handleTask);
         app.post('/api/task/:key', handler.handleTask);
         app.post('/api/task/', handler.handleError);
+
+        app.post('/api/file/', multipart(), handler.handleFile);
 
         app.get('/api/task/:key/status/:id', handler.handleStatus)
     };

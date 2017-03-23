@@ -17,5 +17,9 @@ $ curl -H "Content-Type: application/json" -X POST -d     '{
        "data": "some data"
      }' http://localhost:3000/api/key/key1234/tag/123
 
-`````
 
+`````
+## send file
+``````
+$ curl -F file=@PATH_TO_FILE http://localhost:3000/api/file/
+``````
