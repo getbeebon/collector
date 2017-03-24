@@ -10,7 +10,7 @@ module.exports = {
         multipleStatements: true
     },
     kue: {
-        prefix: ''
+        prefix: 'beebon_'
     },
-    file_path: __dirname + '/../uploads/'
+    filestore: __dirname + '/var/beebon/filestore'
 };
