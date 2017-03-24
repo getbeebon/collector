@@ -1,4 +1,7 @@
 
+
+--- таблица ключей
+
 DROP TABLE IF EXISTS `key1235`;
 
 CREATE TABLE `key1235` (
@@ -11,3 +14,14 @@ CREATE TABLE `key1235` (
 ) 
 COLLATE='utf8_general_ci' 
 ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+--- таблица файлов
+
+CREATE TABLE `files` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `file` varchar(32) NOT NULL DEFAULT '',
+  `mime` varchar(32) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
