@@ -60,7 +60,7 @@ var server = function (config) {
         app.get('/api/task/:key/status/:id', handler.handleStatus)
     };
 
-    Joi.validate(config, configSchema, function (err, config) {
+    Joi.validate(config, configSchema, {allowUnknown: true}, function (err, config) {
         if (err) {
             console.log(err);
             process.exit(1);
