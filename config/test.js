@@ -12,5 +12,10 @@ module.exports = {
     kue: {
         prefix: 'beebon_'
     },
+    auth: {
+        ip: /192.168.\d+.\d+/,
+        user: "user",
+        pass: "password"
+    },
     filestore: __dirname + '/var/beebon/filestore'
 };

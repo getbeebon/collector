@@ -2,6 +2,8 @@ var express = require('express');
 var bodyparser = require('body-parser');
 var multipart = require('connect-multiparty');
 var Joi = require('joi');
+var basicAuth = require('basic-auth');
+
 var console = require('tracer').colorConsole();
 
 var Handler = require('./lib/handler');
@@ -21,6 +23,21 @@ var server = function (config) {
 
         var handler = new Handler(db, kue, config);
         app.use(bodyparser.json());
+
+        //auth
+        app.use(function (req, res, next) {
+            var auth = config.auth;
+            if (auth.ip.test(req.ip)) {
+                next();
+            } else {
+                var user = basicAuth(req);
+                if (user && user.name == auth.user && user.pass == auth.pass) {
+                    next();
+                } else {
+                    res.sendStatus(403)
+                }
+            }
+        });
 
         app.post('/api/key/:key/tag/:tag', handler.handle);
         app.post('/api/key/:key/tag/', handler.handle);
