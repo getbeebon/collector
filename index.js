@@ -1,41 +1,37 @@
-var express = require('express');
-var bodyparser = require('body-parser');
-var multipart = require('connect-multiparty');
-var Joi = require('joi');
-var basicAuth = require('basic-auth');
+const express = require('express');
+const bodyparser = require('body-parser');
+const multipart = require('connect-multiparty');
+const Joi = require('joi');
+const basicAuth = require('basic-auth');
+const console = require('tracer').colorConsole();
 
-var console = require('tracer').colorConsole();
+const Handler = require('./lib/handler');
+const configSchema = require('./lib/configSchema');
 
-var Handler = require('./lib/handler');
-var configSchema = require('./lib/configSchema');
+const Kue = require('./lib/kue');
+const Db = require('./lib/db');
 
-var Kue = require('./lib/kue');
-var Db = require('./lib/db');
+const server = (config) => {
 
-var server = function (config) {
+    let app, db, kue;
 
-    var app, db, kue;
-
-    var init = function (config) {
+    let init = (config) => {
         app = express();
-        db = new Db(config);
-        kue = new Kue(config, db);
 
-        var handler = new Handler(db, kue, config);
+        db = Db(config);
+        kue = Kue(config, db);
+
+        let handler = Handler(db, kue, config);
         app.use(bodyparser.json());
 
         //auth
         app.use(function (req, res, next) {
             var auth = config.auth;
-            if (auth.ip.test(req.ip)) {
+            var user = basicAuth(req);
+            if (user && user.name == auth.user && user.pass == auth.pass) {
                 next();
             } else {
-                var user = basicAuth(req);
-                if (user && user.name == auth.user && user.pass == auth.pass) {
-                    next();
-                } else {
-                    res.sendStatus(403)
-                }
+                res.sendStatus(403)
             }
         });
 
@@ -69,16 +65,14 @@ var server = function (config) {
         }
     });
 
-    var run = function () {
+    let run = () => {
         app.listen(config.collector.port, function () {
             console.log('start');
         });
 
     };
 
-    return {
-        run: run
-    };
+    return { run }
 };
 
 module.exports = server;

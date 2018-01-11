@@ -13,7 +13,6 @@ module.exports = {
         prefix: 'beebon_'
     },
     auth: {
-        ip: /192.168.\d+.\d+/,
         user: "user",
         pass: "password"
     },
