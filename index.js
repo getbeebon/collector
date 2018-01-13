@@ -2,8 +2,8 @@ const express = require('express');
 const bodyparser = require('body-parser');
 const multipart = require('connect-multiparty');
 const Joi = require('joi');
-const basicAuth = require('basic-auth');
 const console = require('tracer').colorConsole();
+const basicAuth = require('express-basic-auth')
 
 const Handler = require('./lib/handler');
 const configSchema = require('./lib/configSchema');
@@ -25,25 +25,24 @@ const server = (config) => {
         app.use(bodyparser.json());
 
         //auth
-        app.use(function (req, res, next) {
-            var auth = config.auth;
-            var user = basicAuth(req);
-            if (user && user.name == auth.user && user.pass == auth.pass) {
-                next();
-            } else {
-                res.sendStatus(403)
-            }
-        });
+        if (config.auth && config.auth.users) {
+            app.use(basicAuth({
+                users: config.auth.users
+            }))
+        }
 
-        app.post('/api/key/:key/tag/:tag', handler.handle);
-        app.post('/api/key/:key/tag/', handler.handle);
-        app.post('/api/key/:key', handler.handle);
+        /*
+        app.post('/api/key/:key/tag/:tag', handler.handleRequest);
+        app.post('/api/key/:key/tag/', handler.handleRequest);
+        app.post('/api/key/:key', handler.handleRequest);
         app.post('/api/key/', handler.handleError);
+        */
+        app.use('/api/key', handler.handlerRequest.router())
         app.post('/api/', handler.handleError);
 
-        app.post('/api/log/:key/tag/:tag', handler.handle);
-        app.post('/api/log/:key/tag/', handler.handle);
-        app.post('/api/log/:key', handler.handle);
+        app.post('/api/log/:key/tag/:tag', handler.handleRequest);
+        app.post('/api/log/:key/tag/', handler.handleRequest);
+        app.post('/api/log/:key', handler.handleRequest);
         app.post('/api/log/', handler.handleError);
 
         app.post('/api/task/:key/tag/:tag', handler.handleTask);
@@ -56,7 +55,7 @@ const server = (config) => {
         app.get('/api/task/:key/status/:id', handler.handleStatus)
     };
 
-    Joi.validate(config, configSchema, {allowUnknown: true}, function (err, config) {
+    Joi.validate(config, configSchema, {allowUnknown: true}, (err, config) => {
         if (err) {
             console.log(err);
             process.exit(1);
@@ -66,8 +65,8 @@ const server = (config) => {
     });
 
     let run = () => {
-        app.listen(config.collector.port, function () {
-            console.log('start');
+        app.listen(config.collector.port, () => {
+            console.log('start with config:', config);
         });
 
     };

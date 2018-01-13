@@ -13,8 +13,9 @@ module.exports = {
         prefix: 'beebon_'
     },
     auth: {
-        user: "user",
-        pass: "password"
+        users: {
+            'user': 'password'
+        }
     },
     filestore: __dirname + '/var/beebon/filestore'
 };
