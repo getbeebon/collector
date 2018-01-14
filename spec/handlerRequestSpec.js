@@ -11,13 +11,16 @@ var app = express();
 app.use(bodyparser.json());
 
 //let handler = Handler(db, kue, config);
-var conn = {
-    query: (q, v, c) => { c(); }
-}
+var conn = Promise.resolve({ 
+    query: (q, v) => { 
+        console.log('query', q, v)
+        return Promise.resolve('good');
+    }
+})
 
 describe('handlerRequest', () => {
     it('should return 200 response code on api/key/:key', (done) => {
-        var handlerRequest = HandlerRequest(conn);
+        var handlerRequest = HandlerRequest({conn});
         app.use('/api/key', handlerRequest.router())
 
         var s = app.listen(config.port, () => {
@@ -37,7 +40,7 @@ describe('handlerRequest', () => {
     });
 
     it('should return 200 response code on api/key/:key/tag/:tag', (done) => {
-        var handlerRequest = HandlerRequest(conn);
+        var handlerRequest = HandlerRequest({conn});
         app.use('/api/key', handlerRequest.router())
 
         var s = app.listen(config.port, () => {

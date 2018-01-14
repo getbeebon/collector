@@ -8,6 +8,7 @@ CREATE TABLE `key1235` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `timestamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   `tag` varchar(32) NOT NULL DEFAULT '',
+  `status` varchar(32) NOT NULL DEFAULT '',
   `payload` json DEFAULT NULL,
   `ip` INT UNSIGNED DEFAULT NULL,
   PRIMARY KEY (`id`)

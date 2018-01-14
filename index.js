@@ -5,23 +5,22 @@ const Joi = require('joi');
 const console = require('tracer').colorConsole();
 const basicAuth = require('express-basic-auth')
 
-const Handler = require('./lib/handler');
+//const Handler = require('./lib/handler');
 const configSchema = require('./lib/configSchema');
 
 const Kue = require('./lib/kue');
 const Db = require('./lib/db');
 
+const HandlerRequest = require('./lib/handlers/request');
+const HandlerStatus = require('./lib/handlers/status');
+const HandlerFile = require('./lib/handlers/file');
+
 const server = (config) => {
 
-    let app, db, kue;
+    let app, conn, kue;
 
     let init = (config) => {
         app = express();
-
-        db = Db(config);
-        kue = Kue(config, db);
-
-        let handler = Handler(db, kue, config);
         app.use(bodyparser.json());
 
         //auth
@@ -31,28 +30,25 @@ const server = (config) => {
             }))
         }
 
-        /*
-        app.post('/api/key/:key/tag/:tag', handler.handleRequest);
-        app.post('/api/key/:key/tag/', handler.handleRequest);
-        app.post('/api/key/:key', handler.handleRequest);
-        app.post('/api/key/', handler.handleError);
-        */
-        app.use('/api/key', handler.handlerRequest.router())
-        app.post('/api/', handler.handleError);
+        conn = Db(config);
+        kue = new Kue({conn, config});
 
-        app.post('/api/log/:key/tag/:tag', handler.handleRequest);
-        app.post('/api/log/:key/tag/', handler.handleRequest);
-        app.post('/api/log/:key', handler.handleRequest);
-        app.post('/api/log/', handler.handleError);
+        var handlerRequest = HandlerRequest({conn, kue, config});
+        var handlerStatus = HandlerStatus({conn});
+        var handlerFile = HandlerFile({conn, config});
 
-        app.post('/api/task/:key/tag/:tag', handler.handleTask);
-        app.post('/api/task/:key/tag/', handler.handleTask);
-        app.post('/api/task/:key', handler.handleTask);
-        app.post('/api/task/', handler.handleError);
+        app.use('/api/key', handlerRequest.router());
+        app.use('/api/log', handlerRequest.router());
 
-        app.post('/api/file/', multipart(), handler.handleFile);
+        app.use('/api/task', handlerRequest.router((req, res, next) => {
+            req.sendToKue = true;
+            next();
+        }));
+        app.use('/api/task', handlerStatus.router());
 
-        app.get('/api/task/:key/status/:id', handler.handleStatus)
+    
+        //app.post('/api/file/', multipart(), handler.handleFile);
+
     };
 
     Joi.validate(config, configSchema, {allowUnknown: true}, (err, config) => {
