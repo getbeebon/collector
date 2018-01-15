@@ -14,7 +14,7 @@ app.use(bodyparser.json());
 var conn = Promise.resolve({ 
     query: (q, v) => { 
         console.log('query', q, v)
-        return Promise.resolve('good');
+        return Promise.resolve([{insertId: 'good'}]);
     }
 })
 

@@ -1,13 +1,11 @@
 const express = require('express');
 const bodyparser = require('body-parser');
-const multipart = require('connect-multiparty');
+const fs = require('fs-extra');
 const Joi = require('joi');
 const console = require('tracer').colorConsole();
 const basicAuth = require('express-basic-auth')
 
-//const Handler = require('./lib/handler');
 const configSchema = require('./lib/configSchema');
-
 const Kue = require('./lib/kue');
 const Db = require('./lib/db');
 
@@ -35,7 +33,7 @@ const server = (config) => {
 
         var handlerRequest = HandlerRequest({conn, kue, config});
         var handlerStatus = HandlerStatus({conn});
-        var handlerFile = HandlerFile({conn, config});
+        var handlerFile = HandlerFile({conn, fs, config});
 
         app.use('/api/key', handlerRequest.router());
         app.use('/api/log', handlerRequest.router());
@@ -46,8 +44,7 @@ const server = (config) => {
         }));
         app.use('/api/task', handlerStatus.router());
 
-    
-        //app.post('/api/file/', multipart(), handler.handleFile);
+        app.use('/api/file/', handlerFile.router());
 
     };
 
