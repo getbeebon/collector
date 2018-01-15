@@ -11,7 +11,6 @@ const config = {
 var app = express();
 app.use(bodyparser.json());
 
-//let handler = Handler(db, kue, config);
 var conn = Promise.resolve({ 
     query: (q, v) => { 
         console.log('query', q, v)
