@@ -1,0 +1,60 @@
+swagger: "2.0"
+info:
+  description: "API"
+  version: "1.0.0"
+  title: "Beebon collector"
+host: "localhost:3000"
+basePath: "/api"
+tags:
+- name: "request"
+  description: "Process no answer event"
+schemes:
+- "http"
+paths:
+  /log/{key}:
+    post:
+      tags:
+      - "request"
+      summary: "Add log by key with any json body"
+      description: ""
+      operationId: "HandlerRequest"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "key"
+        in: "path"
+        description: "key"
+        required: true
+        type: "string"        
+      - in: "body"
+        name: "body"
+        description: "Custom JSON"
+        required: true
+        schema:
+          $ref: "#/definitions/Response"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/Result"
+        500:
+          description: "Any error"
+          schema:
+            $ref: "#/definitions/Response"
+
+definitions:
+  Response:
+    type: "object"
+    properties:
+      status:
+        type: "string"
+
+  Result:
+    type: "object"
+    properties:
+      result:
+        type: "string"
+      id:
+        type: "string"
