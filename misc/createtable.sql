@@ -22,7 +22,8 @@ ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE `files` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `file` varchar(32) NOT NULL DEFAULT '',
-  `mime` varchar(32) NOT NULL DEFAULT '',
+  `filename` varchar(255) NOT NULL DEFAULT '',
+  `mime` varchar(255) NOT NULL DEFAULT '',
+  `originalname` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

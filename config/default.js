@@ -17,5 +17,5 @@ module.exports = {
             'user': 'password'
         }
     },
-    filestore: __dirname + '/var/beebon/filestore'
+    filestore: 'uploads'
 };
