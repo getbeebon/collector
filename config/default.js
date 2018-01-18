@@ -12,10 +12,10 @@ module.exports = {
     kue: {
         prefix: 'beebon_'
     },
-    auth: {
+    /*auth: {
         users: {
             'user': 'password'
         }
-    },
+    },*/
     filestore: 'uploads'
 };

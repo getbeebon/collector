@@ -12,29 +12,10 @@ const server = (config) => {
     let app, conn, kue;
 
     let init = (config) => {
-        
-
-
-
         conn = Db(config);
         kue = new Kue({conn, config});
 
         app = createApp({conn, kue, config});
-        /*
-        app.use(bodyparser.json());
-
-        var handlerRequest = HandlerRequest({conn, kue, config});
-        var handlerStatus = HandlerStatus({conn});
-        var handlerFile = HandlerFile({conn, fs, config});
-
-        app.use('/api/key', handlerRequest.router());
-        app.use('/api/log', handlerRequest.router());
-
-        app.use('/api/task', 
-        app.use('/api/task', handlerStatus.router());
-
-        app.use('/api/file/', handlerFile.router());
-        */
     };
 
     Joi.validate(config, configSchema, {allowUnknown: true}, (err, config) => {
