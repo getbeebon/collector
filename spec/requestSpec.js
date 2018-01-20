@@ -85,33 +85,38 @@ describe('App', () => {
             })
     });
 
-
-/*
-    it('file pass good', (done) => {
+    it('get status by task id', (done) => {
         var conn = Promise.resolve({ 
             query: (q, v) => { 
                 console.log('query', q, v)
-                return Promise.resolve([{insertId: 'good'}]);
+                return Promise.resolve([[{insertId: 'good', status: 'status'}]]);
             }
         })
         let config = {
             filestore: '', 
+            kue: {
+                prefix: 'beebon_'
+            }
         };
-        let kue;
+        let kue = {
+            publish: () => {}
+        }
         let app = createApp({conn, kue, config});
 
-        var file = 'Content-Disposition: form-data; name="filename"';
         hippie(app, dereferencedSwagger)
-            .header('Content-Type','multipart/form-data')
-            .post('/api/file')            
-            .send(file)
+            .json()
+            .get('/api/task/{key}/id/{id}')
+            .pathParams({
+              key: '1234',
+              id: 2
+            })
+            .send()
             .end(function (err, res, body) {
                 console.log(res.statusCode);
                 expect(res.statusCode).toEqual(200);
-                expect(res.body).toEqual('{"result":"success","id":"good"}');
+                expect(res.body).toEqual('{"status":"status","id":"2"}');
                 if (err) done(err);
                 done()
             })
     });
-*/
 });

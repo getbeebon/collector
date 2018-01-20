@@ -26,6 +26,7 @@
     "mysql2": "^1.1.0",
     "q": "^1.4.1",
     "swagger-parser": "^4.0.1",
+    "swagger-tools": "^0.10.3",
     "tracer": "^0.8.3"
   },
   "devDependencies": {
