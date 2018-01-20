@@ -14,7 +14,6 @@ const server = (config) => {
     let init = (config) => {
         conn = Db(config);
         kue = new Kue({conn, config});
-
         app = createApp({conn, kue, config});
     };
 

@@ -2,7 +2,8 @@ const Joi = require('joi');
 
 const configSchema = Joi.object().keys({
     collector: Joi.object().keys({
-        port: Joi.number().integer().min(1).max(65535).required()
+        port: Joi.number().integer().min(1).max(65535).required(),
+        baseUrl: Joi.string().required(), 
     }),
     mysql: Joi.object().keys({
         host: Joi.string().required(),
