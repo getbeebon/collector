@@ -4,7 +4,7 @@ const console = require('tracer').colorConsole();
 
 const configSchema = require('./configSchema');
 const Kue = require('./kue');
-const Db = require('./db');
+const Db = require('./../common/db');
 const createApp = require('./app');
 
 const server = (config) => {

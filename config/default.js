@@ -12,6 +12,9 @@ module.exports = {
     kue: {
         prefix: 'beebon_'
     },
+    web: {
+        port: 3101
+    },
     /*auth: {
         users: {
             'user': 'password'
