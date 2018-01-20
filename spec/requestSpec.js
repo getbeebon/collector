@@ -49,6 +49,37 @@ describe('App', () => {
             })
     });
 
+
+    it('log pass good with auth', (done) => {
+        var conn = Promise.resolve({ 
+            query: (q, v) => { 
+                console.log('query', q, v)
+                return Promise.resolve([{insertId: 'good'}]);
+            }
+        })
+        let config = {filestore: '', auth: {users: {test: 'test'}}};
+        let kue;
+        let app = createApp({conn, kue, config});
+
+        hippie(app, dereferencedSwagger)
+            .json()
+            .auth('test', 'test')
+            .post('/api/log/{key}')
+            .pathParams({
+              key: '1234'
+            })
+            .send({
+                number: 456987
+            })
+            .end(function (err, res, body) {
+                console.log(res.statusCode);
+                expect(res.statusCode).toEqual(200);
+                expect(res.body).toEqual('{"result":"success","id":"good"}');
+                if (err) done(err);
+                done()
+            })
+    });
+
     it('task pass good', (done) => {
         var conn = Promise.resolve({ 
             query: (q, v) => { 
