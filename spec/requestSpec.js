@@ -4,13 +4,13 @@ const fs = require('fs');
 const path = require('path');
 const jsyaml = require('js-yaml');
 
-let createApp = require('../lib/index');
+let createApp = require('../collector/app');
 
 let dereferencedSwagger;
 
 describe('App', () => {
     beforeEach((done) => {
-        let spec = fs.readFileSync(path.join(__dirname, './../lib/api.yaml'), 'utf8');
+        let spec = fs.readFileSync(path.join(__dirname, './../collector/api.yaml'), 'utf8');
         let swaggerDoc = jsyaml.safeLoad(spec);
 
         let parser = new SwaggerParser();

@@ -1,5 +1,5 @@
 
-var Server = require('./index');
+var Server = require('./collector/server');
 var config = require('config');
 
 var server = Server(config);

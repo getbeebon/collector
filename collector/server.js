@@ -2,10 +2,10 @@ const express = require('express');
 const Joi = require('joi');
 const console = require('tracer').colorConsole();
 
-const configSchema = require('./lib/configSchema');
-const Kue = require('./lib/kue');
-const Db = require('./lib/db');
-const createApp = require('./lib/index');
+const configSchema = require('./configSchema');
+const Kue = require('./kue');
+const Db = require('./db');
+const createApp = require('./app');
 
 const server = (config) => {
 

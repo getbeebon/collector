@@ -1,5 +1,5 @@
 const request = require('request');
-const HandlerFile = require('../lib/handlers/file');
+const HandlerFile = require('../collector/handlers/file');
 const express = require('express');
 const bodyparser = require('body-parser');
 
@@ -8,7 +8,7 @@ const config = {
     filestore: 'uploads'
 }
 
-var createApp = require('./../lib/index');
+var createApp = require('./../collector/app');
 
 var conn = Promise.resolve({ 
     query: (q, v) => { 

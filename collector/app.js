@@ -7,15 +7,12 @@ const swaggerTools = require('swagger-tools');
 const jsyaml = require('js-yaml');
 const basicAuth = require('express-basic-auth');
 const fse = require('fs-extra');
-const multipart = require('connect-multiparty');
+const config = require('config');
+const multer = require('multer');
 
 const HandlerRequest = require('./handlers/request');
 const HandlerStatus = require('./handlers/status');
 const HandlerFile = require('./handlers/file');
-
-const config = require('config');
-
-const multer = require('multer');
 
 function createApp({conn, kue, config}) {
     let app = express();
@@ -32,13 +29,12 @@ function createApp({conn, kue, config}) {
             HandlerLogRequest: handlerRequest.handleRequest,
             HandlerTaskRequest: (req, res, next) => {
                 req.sendToKue = true;
-                handlerRequest.handleRequest(req, res, next)
+                handlerRequest.handleRequest(req, res, next);
             },
             HandlerStatusRequest: handlerStatus.handleStatus,
             HandlerFile: handlerFile.handleFile
         }
     };
-
 
     let getUnauthorizedResponse = (req) => {
         console.log('req.auth:', req.auth);
@@ -64,7 +60,7 @@ function createApp({conn, kue, config}) {
         app.use(middleware.swaggerUi());
         
         app.use(middleware.swaggerRouter(options));
-     //   app.use(middleware.swaggerSecurity(basicAuth));
+        //app.use(middleware.swaggerSecurity(basicAuth));
 
         app.use((err, req, res, next) => {
             console.log('unsupported error', err);
