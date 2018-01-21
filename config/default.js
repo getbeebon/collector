@@ -21,5 +21,16 @@ module.exports = {
             'user': 'password'
         }
     },*/
+    reporter: {
+        to: 'serge.dmitriev@gmail.com',
+        from: 'avat12111@yandex.ru',
+        mail: {
+            service: 'Yandex',
+            auth: {
+                user: 'avat12111',
+                pass: 'nononame'
+            }
+        }
+    },
     filestore: 'uploads'
 };

@@ -2,7 +2,7 @@ const express = require('express');
 const Joi = require('joi');
 const console = require('tracer').colorConsole();
 
-const configSchema = require('./configSchema');
+const configSchema = require('./../common/configSchema');
 const Kue = require('./kue');
 const Db = require('./../common/db');
 const createApp = require('./app');
