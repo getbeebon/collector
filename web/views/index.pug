@@ -25,6 +25,12 @@ html(lang='ru')
     body(ng-app="beebon_dashboard")
         nav.navbar.navbar-inverse
             a.navbar-brand(href='/') Beebon Web
+            .collapse.navbar-collapse
+                ul.nav.navbar-nav
+                    li
+                      a(href='/kue/', target='_new')
+                        | Kue
+                        span.sr-only (current)
 
         .container
             .row

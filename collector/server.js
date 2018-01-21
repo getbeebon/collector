@@ -28,7 +28,7 @@ const server = (config) => {
 
     let run = () => {
         app.listen(config.collector.port, () => {
-            console.log('start with config:', config);
+            console.log('collector app start with config:', config);
         });
 
     };
